@@ -1,0 +1,12 @@
+# IntelliJ IDEA 설정
+**/.idea/
+**/*.iml
+**/*.ipr
+**/*.iws
+
+# IntelliJ 빌드 결과
+**/out/
+
+# Gradle 생성 파일
+**/.gradle/
+**/build/

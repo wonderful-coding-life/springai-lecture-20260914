@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
+import org.springframework.ai.reader.markdown.MarkdownDocumentReader;
+import org.springframework.ai.reader.markdown.config.MarkdownDocumentReaderConfig;
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -90,4 +93,33 @@ public class RagTests {
         var documents = texts.stream().map(Document::new).toList();
         vectorStore.write(documents);
     }
+
+    @Test
+    public void testPdfReader() {
+        var reader = new PagePdfDocumentReader("file:D:/springai/support/캠퍼스 온라인 쇼핑몰 반품 FAQ.pdf");
+        var documents = reader.read();
+        documents.stream().forEach(doc -> doc.getMetadata().put("docType", "pdf"));
+        vectorStore.write(documents);
+    }
+
+    @Test
+    public void testMarkdownReader() {
+        var config = MarkdownDocumentReaderConfig.builder()
+                .withIncludeCodeBlock(false)
+                .withIncludeBlockquote(false)
+                .withAdditionalMetadata("docType", "markdown")
+                .build();
+
+        var reader = new MarkdownDocumentReader("file:D:/springai/support/캠퍼스 온라인 쇼핑몰 반품 정책 매뉴얼.md", config);
+        var documents = reader.read();
+        vectorStore.write(documents);
+    }
+
+
+
+
+
+
+
+
 }

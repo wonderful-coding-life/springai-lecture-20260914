@@ -8,6 +8,7 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +22,11 @@ public class ApiController {
     @Autowired
     private ChatClient chatClient;
 
+//    @Autowired
+//    private ProductOrderTool productOrderTool;
+
     @Autowired
-    private ProductOrderTool productOrderTool;
+    private ToolCallbackProvider toolCallbackProvider;
 
     @Autowired
     private KnowledgeSearchTool knowledgeSearchTool;
@@ -35,7 +39,7 @@ public class ApiController {
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .system("마크다운 형식을 사용하지 말고 순수한 텍스트 형식으로 답 해 주세요.")
                 .user(message)
-                .tools(productOrderTool, knowledgeSearchTool)
+                .tools(toolCallbackProvider, knowledgeSearchTool)
                 .toolContext(Map.of("username", username))
                 .call().content();
     }

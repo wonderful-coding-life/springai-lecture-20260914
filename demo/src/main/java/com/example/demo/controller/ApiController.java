@@ -10,10 +10,13 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Map;
 
@@ -31,10 +34,13 @@ public class ApiController {
     @Autowired
     private KnowledgeSearchTool knowledgeSearchTool;
 
-    @PostMapping("/chats")
-    public String postChats(@RequestBody String message,
-                            @RequestParam("conversationId") String conversationId,
-                            @RequestParam("username") String username) {
+    @Autowired
+    private JsonMapper jsonMapper;
+
+    @PostMapping(value="/chats", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> postChats(@RequestBody String message,
+                                  @RequestParam("conversationId") String conversationId,
+                                  @RequestParam("username") String username) {
         return chatClient.prompt()
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .system("""
@@ -48,6 +54,6 @@ public class ApiController {
                 .user(message)
                 .tools(toolCallbackProvider, knowledgeSearchTool)
                 .toolContext(Map.of("username", username))
-                .call().content();
+                .stream().content().map(jsonMapper::writeValueAsString); // --> Flux<String>
     }
 }

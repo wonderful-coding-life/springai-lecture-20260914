@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>Orbit Chat</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Orbit Chat 홈">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>orbit<span class="brand-accent">.</span></span>
+      </a>
+      <div class="user-control">
+        <label for="username">고객명</label>
+        <input id="username" type="text" autocomplete="name" placeholder="이름을 입력하세요" maxlength="60">
+      </div>
+      <button id="new-chat" class="button button-secondary" type="button">
+        <span aria-hidden="true">＋</span> 새 대화
+      </button>
+    </header>
+
+    <section class="chat-panel" aria-label="AI 채팅">
+      <div id="messages" class="messages" aria-live="polite">
+        <div id="welcome" class="welcome">
+          <div class="welcome-icon" aria-hidden="true">✦</div>
+          <p class="eyebrow">ORBIT ASSISTANT</p>
+          <h1>무엇을 도와드릴까요?</h1>
+          <p class="welcome-copy">궁금한 내용을 편하게 물어보세요.<br>대화의 맥락을 기억하고 이어서 답변해 드립니다.</p>
+          <div class="suggestions" aria-label="추천 질문">
+            <button type="button" class="suggestion">서비스 이용 방법을 알려줘</button>
+            <button type="button" class="suggestion">주문 상태를 확인하고 싶어</button>
+            <button type="button" class="suggestion">도움이 필요한 일이 있어</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="composer-wrap">
+        <form id="chat-form" class="composer">
+          <textarea id="message-input" rows="1" maxlength="4000" placeholder="메시지를 입력하세요" aria-label="메시지 입력"></textarea>
+          <div class="composer-footer">
+            <span class="hint"><kbd>Enter</kbd> 전송 · <kbd>Shift</kbd> + <kbd>Enter</kbd> 줄바꿈</span>
+            <span id="char-count" class="char-count">0 / 4000</span>
+            <button id="send-button" class="send-button" type="submit" aria-label="메시지 전송">
+              <span class="send-icon" aria-hidden="true">↑</span>
+            </button>
+          </div>
+        </form>
+        <p class="disclaimer">AI가 생성한 답변은 부정확할 수 있습니다. 중요한 내용은 한 번 더 확인해 주세요.</p>
+      </div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

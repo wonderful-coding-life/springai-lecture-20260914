@@ -37,7 +37,14 @@ public class ApiController {
                             @RequestParam("username") String username) {
         return chatClient.prompt()
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, conversationId))
-                .system("마크다운 형식을 사용하지 말고 순수한 텍스트 형식으로 답 해 주세요.")
+                .system("""
+                        마크다운 형식을 사용하지 말고 순수한 텍스트 형식으로 답 해 주세요.
+                        --------
+                        사용자가 페이지 생성/수정/삭제를 요청하면 Notion MCP Tool을 사용하여 작업하세요.
+                        필수 정보가 충분하면 추가 확인 질문 없이 바로 실행하세요.
+                        새 페이지 생성 시 사용자가 위치를 지정하지 않으면 항상 다음 parent page_id 아래에 생성하세요.
+                        parent page_id: 3dc826bfae2180988309eca7693c3a80
+                        """)
                 .user(message)
                 .tools(toolCallbackProvider, knowledgeSearchTool)
                 .toolContext(Map.of("username", username))

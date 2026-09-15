@@ -15,13 +15,13 @@ public class AppConfig {
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder, ChatMemory chatMemory, VectorStore vectorStore) {
         return builder
-                .defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore)
-                        .searchRequest(SearchRequest.builder()
-                                .filterExpression("docType == 'markdown'")
-                                .similarityThreshold(0.7)
-                                .topK(2)
-                                .build())
-                        .build())
+//                .defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore)
+//                        .searchRequest(SearchRequest.builder()
+//                                .filterExpression("docType == 'markdown'")
+//                                .similarityThreshold(0.7)
+//                                .topK(2)
+//                                .build())
+//                        .build())
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .defaultOptions(OpenAiChatOptions.builder()
                                 .model("gpt-5.6-luna")

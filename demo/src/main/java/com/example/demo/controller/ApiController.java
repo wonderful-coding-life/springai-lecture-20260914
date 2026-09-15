@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.tool.KnowledgeSearchTool;
 import com.example.demo.tool.ProductOrderTool;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -23,6 +24,9 @@ public class ApiController {
     @Autowired
     private ProductOrderTool productOrderTool;
 
+    @Autowired
+    private KnowledgeSearchTool knowledgeSearchTool;
+
     @PostMapping("/chats")
     public String postChats(@RequestBody String message,
                             @RequestParam("conversationId") String conversationId,
@@ -31,7 +35,7 @@ public class ApiController {
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .system("마크다운 형식을 사용하지 말고 순수한 텍스트 형식으로 답 해 주세요.")
                 .user(message)
-                .tools(productOrderTool)
+                .tools(productOrderTool, knowledgeSearchTool)
                 .toolContext(Map.of("username", username))
                 .call().content();
     }

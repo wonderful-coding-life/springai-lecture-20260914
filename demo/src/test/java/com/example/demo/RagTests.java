@@ -115,6 +115,12 @@ public class RagTests {
         vectorStore.write(documents);
     }
 
+    @Test
+    public void testSimilaritySearch() {
+        var documents = vectorStore.similaritySearch("책을 배송 받았는데 엉뚱한 책이 왔어요. 반품하고 싶어요. 절차 알려 주세요.");
+        documents.stream().forEach(doc -> log.info("{}", doc.getText()));
+    }
+
 
 
 
